@@ -16,7 +16,7 @@
 ** Hello world
    @code rust
    fn main() {
-     println!("Hello World!");
+       println!("Hello World!");
    }
    @end
 
@@ -117,8 +117,8 @@
      let x = 5;
      let x = x + 1;
      {
-       let x = x * 2;
-       println!("The value of x in the inner scope is: {}", x); // x is 12
+         let x = x * 2;
+         println!("The value of x in the inner scope is: {}", x); // x is 12
      }
      println!("The value of x is: {}", x); // x is 6 again
      @end
@@ -305,7 +305,7 @@
     If your function returns something you have to annotate the value with an arrow after the function name like this:
     @code rust
     fn my_function() -> u32 {
-      3*5
+        3*5
     }
     @end
 
@@ -315,7 +315,7 @@
     You can then later use the values inside the function:
     @code rust
     fn adder(x:u32, y:u32) -> u32 {
-      x+y
+        x+y
     }
     let x = adder(3,5);
     println!("3 and 5 added equals {}",x);
@@ -328,9 +328,9 @@
    let number = 3;
 
    if number < 5 {
-     println!("condition was true");
+       println!("condition was true");
    } else {
-     println!("condition was false");
+       println!("condition was false");
    }
    @end
 
@@ -353,11 +353,11 @@
     let mut counter = 0;
 
     let result = loop {
-      counter += 1;
+        counter += 1;
 
-      if counter == 10 {
-        break counter * 2;
-      }
+        if counter == 10 {
+            break counter * 2;
+        }
     };
     @end
 
@@ -373,21 +373,21 @@
     @code rust
     let mut count = 0;
     'counting_up: loop {
-      println!("count = {}", count);
-      let mut remaining = 10;
+        println!("count = {}", count);
+        let mut remaining = 10;
 
-      loop {
-        println!("remaining = {}", remaining);
-        if remaining == 9 {
-          break;
+        loop {
+            println!("remaining = {}", remaining);
+            if remaining == 9 {
+                break;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
         }
-        if count == 2 {
-          break 'counting_up;
-        }
-        remaining -= 1;
-      }
 
-      count += 1;
+        count += 1;
     }
     println!("End count = {}", count);
     @end
@@ -398,8 +398,8 @@
     @code rust
     let x = 1
     while x > 10 {
-      println!("X is {}", x);
-      x += 1;
+        println!("X is {}", x);
+        x += 1;
     }
     @end
 
@@ -412,7 +412,7 @@
     let a = [10, 20, 30, 40, 50];
 
     for element in a {
-      println!("the value is: {}", element);
+        println!("the value is: {}", element);
     }
     @end
 
@@ -423,7 +423,7 @@
      This can be done like this:
      @code rust
      for number in (1..6).rev() {
-       println!("{}", number);
+         println!("{}", number);
      }
      @end
      This will print 5,4,3,2,1.
@@ -548,15 +548,15 @@
    You pass a reference by putting a `&` in front of the variable name in the function call and you also put a `&` before the type in the annotations.
    @code rust
    fn main() {
-     let s1 = String::from("hello");
+       let s1 = String::from("hello");
 
-     let len = calculate_length(&s1);
+       let len = calculate_length(&s1);
 
-     println!("The length of '{}' is {}.", s1, len);
+       println!("The length of '{}' is {}.", s1, len);
    }
 
    fn calculate_length(s: &String) -> usize {
-     s.len()
+       s.len()
    }
    @end
 
@@ -570,13 +570,13 @@
     You can make the mutable like this:
     @code rust
     fn main() {
-      let mut s = String::from("hello");
+        let mut s = String::from("hello");
 
-      change(&mut s);
+        change(&mut s);
     }
 
     fn change(some_string: &mut String) {
-      some_string.push_str(", world");
+        some_string.push_str(", world");
     }
     @end
 
@@ -585,7 +585,7 @@
     @code rust
     let mut s = String::from("hello");
     {
-      let r1 = &mut s;
+        let r1 = &mut s;
     } // r1 goes out of scope here, so we can make a new reference with no problems.
 
     let r2 = &mut s;
@@ -638,10 +638,10 @@
    You can define structs with the `struct` keyword followed by the name and `{}` inside which you define the /fields/ of the struct.
    @code rust
    struct User {
-     active: bool,
-     username: String,
-     email: String,
-     sign_in_count: u64,
+       active: bool,
+       username: String,
+       email: String,
+       sign_in_count: u64,
    }
    @end
 
@@ -649,10 +649,10 @@
    You can create an instance for a struct like this: (example from above used)
    @code rust
    let user1 = User {
-     email: String::from("someone@example.com"),
-     username: String::from("someusername123"),
-     active: true,
-     sign_in_count: 1,
+       email: String::from("someone@example.com"),
+       username: String::from("someusername123"),
+       active: true,
+       sign_in_count: 1,
    };
    @end
    You can access values with `.` and the field name:
@@ -667,12 +667,12 @@
    Here you can also see how you annotate functions that return an instance of a struct.
    @code rust
    fn build_user(email: String, username: String) -> User {
-     User {
-       email, // instead of email: email
-       username, // instead of username: username
-       active: true,
-       sign_in_count: 1,
-     }
+       User {
+           email, // instead of email: email
+           username, // instead of username: username
+           active: true,
+           sign_in_count: 1,
+       }
    }
    @end
 
@@ -680,8 +680,8 @@
    You can use the `..` syntax to just extend an existing struct with new fields:
    @code rust
    let user2 = User {
-     email: String::from("another@example.com"),
-     ..user1
+       email: String::from("another@example.com"),
+       ..user1
    };
    @end
    This will set all fields which aren't specified to the values which they have in `user1`.
@@ -695,8 +695,8 @@
    struct Point(i32, i32, i32);
 
    fn main() {
-     let black = Color(0, 0, 0);
-     let origin = Point(0, 0, 0);
+       let black = Color(0, 0, 0);
+       let origin = Point(0, 0, 0);
    }
    @end
    You can access the values inside them like the values of {***** Access values}[tuples].
@@ -709,17 +709,17 @@
    @code rust
    #[derive(Debug)]
    struct Rectangle {
-     width: u32,
-     height: u32,
+       width: u32,
+       height: u32,
    }
 
    fn main() {
-     let rect1 = Rectangle {
-       width: 30,
-       height: 50,
-     };
+       let rect1 = Rectangle {
+           width: 30,
+           height: 50,
+       };
 
-     println!("rect1 is {:?}", rect1);
+       println!("rect1 is {:?}", rect1);
    }
    @end
 
@@ -731,26 +731,26 @@
    You can then use this method with a `.` and the method name.
    @code rust
    struct Rectangle {
-     width: u32,
-     height: u32,
+       width: u32,
+       height: u32,
    }
 
    impl Rectangle {
-     fn area(&self) -> u32 {
-       self.width * self.height
-     }
+       fn area(&self) -> u32 {
+           self.width * self.height
+       }
    }
 
    fn main() {
-     let rect1 = Rectangle {
-       width: 30,
-       height: 50,
-     };
+       let rect1 = Rectangle {
+           width: 30,
+           height: 50,
+       };
 
-     println!(
-       "The area of the rectangle is {} square pixels.",
-       rect1.area()
-     );
+       println!(
+           "The area of the rectangle is {} square pixels.",
+           rect1.area()
+       );
    }
    @end
 
@@ -759,12 +759,12 @@
    Those functions you can access with `<struct_name>::<function_name>()`.
    @code rust
    impl Rectangle {
-     fn square(size: u32) -> Rectangle {
-       Rectangle {
-         width: size,
-         height: size,
+       fn square(size: u32) -> Rectangle {
+           Rectangle {
+               width: size,
+               height: size,
+           }
        }
-     }
    }
    let sq = Rectangle::square(5);
    @end
