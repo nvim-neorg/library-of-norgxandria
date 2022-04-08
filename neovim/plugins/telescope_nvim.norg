@@ -161,12 +161,19 @@ version: 0.0.11
 
     Now we can modify the `make_display` function so it modifies the entry to our liking.
     @code lua
-    local function make_display(entry)
-      local name = entry.name
-      name=name:gsub("_"," ")
-      local first_upper=name:sub(1,1):upper()
-      return first_upper..name[2,-1]
-    end
+    entry_maker = function(project)
+      local function format_name(name)
+        name=name:gsub("_"," ")
+        local first_upper=name:sub(1,1):upper()
+        return first_upper..name[2,-1]
+      end
+      local formatted=format_name(project.name)
+      return {
+        value = project,
+        display = formatted,
+        ordinal = formatted,
+      }
+    end,
     @end
 
 ** Complex entries with `entry_display.create`
@@ -201,6 +208,12 @@ version: 0.0.11
    Here we will display the project name and a count of the tasks, separated with `:`.
    @code lua
    entry_maker = function(project)
+     local function format_name(name)
+       name=name:gsub("_"," ")
+       local first_upper=name:sub(1,1):upper()
+       return first_upper..name[2,-1]
+     end
+     local formatted=format_name(project.name)
      local displayer=entry_display.create({
        separator=": ",
        items={
@@ -209,14 +222,14 @@ version: 0.0.11
        }
      })
      local function make_display(entry)
-       return displayer({{entry.name, "String"},{tostring(#entry.tasks).." Tasks","Special"}})
+       return displayer({{formatted, "String"},{tostring(#entry.tasks).." Tasks","Special"}})
      end
      return {
        value = project,
        display = function(tbl)
          return make_display(tbl.value) -- the value field is the original entry
        end ,
-       ordinal = project.name,
+       ordinal = formatted,
      }
    end,
    @end
@@ -231,35 +244,37 @@ version: 0.0.11
    We'll dim out projects that have no tasks inside them.
    @code lua
    entry_maker = function(project)
-     local displayer = entry_display.create({
-       separator = ": ",
-       items = {
-         { width = 30 },
-         { remaining = true },
-       },
+     local function format_name(name)
+       name=name:gsub("_"," ")
+       local first_upper=name:sub(1,1):upper()
+       return first_upper..name:sub(2,-1)
+     end
+     local formatted=format_name(project.name)
+     local displayer=entry_display.create({
+       separator=": ",
+       items={
+         {width=30},
+         {remaining=true}
+       }
      })
      local function make_display(entry)
-       return displayer({
-         {
-           entry.name,
-           function()
-             if #entry.tasks == 0 then
-               return { { { 0, 30 }, "Comment" } }
-             else
-               return { { { 0, 30 }, "String" } }
-             end
-           end,
-         },
-         { tostring(#entry.tasks) .. " Tasks", "Special" },
-       })
-     end
+       return displayer({{formatted, 
+         function()
+           if #entry.tasks == 0 then
+             return { { { 0, 30 }, "Comment" } }
+           else
+             return { { { 0, 30 }, "String" } }
+           end
+         end,
 
+       },{tostring(#entry.tasks).." Tasks","Special"}})
+     end
      return {
        value = project,
        display = function(tbl)
          return make_display(tbl.value) -- the value field is the original entry
-       end,
-       ordinal = project.name,
+       end ,
+       ordinal = formatted,
      }
    end,
    @end
@@ -419,6 +434,13 @@ version: 0.0.11
        finder = finders.new_table({
          results = project_tasks,
          entry_maker = function(project)
+           local function format_name(name)
+             name = name:gsub("_", " ")
+             local first_upper = name:sub(1, 1):upper()
+             return first_upper .. name:sub(2, -1)
+           end
+
+           local formatted = format_name(project.name)
            local displayer = entry_display.create({
              separator = ": ",
              items = {
@@ -429,14 +451,12 @@ version: 0.0.11
            local function make_display(entry)
              return displayer({
                {
-                 entry.name,
+                 formatted,
                  function()
                    if #entry.tasks == 0 then
                      return { { { 0, 30 }, "Comment" } }
                    else
-                     return {
-                       { { 0, 30 }, "String" },
-                     }
+                     return { { { 0, 30 }, "String" } }
                    end
                  end,
                },
@@ -449,10 +469,11 @@ version: 0.0.11
              display = function(tbl)
                return make_display(tbl.value) -- the value field is the original entry
              end,
-             ordinal = project.name,
+             ordinal = formatted,
            }
          end,
        }),
+
        sorter = conf.generic_sorter(opts),
        attach_mappings = function(prompt_bufnr)
          actions_set.select:replace(function()
