@@ -13,9 +13,9 @@ version: 0.0.11
    This can easily be done with plenary like this:
    @code lua
    local function reloader()
-     RELOAD("plenary")
-     RELOAD("telescope")
-     RELOAD("<your module>")
+     require("plenary.reload").reload_module("plenary")
+     require("plenary.reload").reload_module("telescope")
+     require("plenary.reload").reload_module("<your module>")
    end
    @end
    Put this code into the function where you start your picker.
