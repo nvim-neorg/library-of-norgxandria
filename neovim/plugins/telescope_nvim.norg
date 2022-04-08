@@ -1,0 +1,497 @@
+@document.meta
+title: telescope
+description: A guide for an advanced custom telescope picker
+authors: max
+categories: 
+created: 2022-03-14
+version: 0.0.11
+@end
+
+* General things
+** Reloader
+   It is really recommended to create a `reloader` function to quickly reload your telescope picker on execution so you don't have to always restart neovim.
+   This can easily be done with plenary like this:
+   @code lua
+   local function reloader()
+     RELOAD("plenary")
+     RELOAD("telescope")
+     RELOAD("<your module>")
+   end
+   @end
+   Put this code into the function where you start your picker.
+
+** Requires
+   It's assumed that you put the following code at the top of your file:
+   @code lua
+   local pickers = require("telescope.pickers")
+   local finders = require("telescope.finders")
+   local conf = require("telescope.config").values -- allows us to use the values from the users config
+   local entry_display = require("telescope.pickers.entry_display")
+   local actions_set = require("telescope.actions.set")
+   local state = require("telescope.actions.state")
+   local previewers = require("telescope.previewers")
+   @end
+
+* Creating custom pickers
+  To demonstrate an advanced custom picker we'll create a picker to pick projects and tasks from a todo list.
+  This is inspired by neorg gtd.
+  You can find a picker which actually does this in {https://github.com/nvim-neorg/neorg-telescope}[neorg-telescope].
+  The list looks like this:
+  @code lua
+  local project_tasks = {
+    {
+      name = "paper_airplane",
+      tasks = {
+        {
+          name = "buy paper",
+          status = "urgent",
+          context = "shop",
+        },
+        {
+          name = "read the airplane book",
+          status = "cancelled",
+        },
+        {
+          name = "watch the video",
+          status = "undone",
+          context = "home",
+        },
+      },
+    },
+    {
+      name = "neovim_config",
+      tasks = {
+        {
+          name = "clean up plugins",
+          status = "undone",
+          context = "today",
+        },
+        {
+          name = "install the best plugin (neorg)",
+          status = "done",
+          context = "today",
+        },
+        {
+          name = "write custom telescope picker",
+          status = "pending",
+        },
+      },
+    },
+
+    {
+      name = "new_plugin",
+      tasks = {}, -- got no ideas so far
+    },
+  }
+  @end
+
+** Basic picker
+   You can create a basic picker like this:
+   @code lua
+   local function pick_project_tasks(opts) -- always expose options
+     opts=opts or {} -- if the user didn't specify options
+     pickers.new(opts,{
+       -- picker config
+       sorter = conf.generic_sorter(opts), -- at the moment we won't configure this
+     }):find()
+   end
+   @end
+
+** Custom entries
+   You can change the entries of your picker with the finder field in the `pickers.new` function like this:
+   @code lua
+   local projects = { "paper_airplane", "neovim_config", "new_plugin" }
+   -- some code
+   pickers.new(opts{
+     finder=finders.new_table({
+       results=projects,
+     })
+   })
+   -- some code
+   @end
+   This will create a picker where you can just pick one of the strings and do nothing when you select them and you can't even sort them with input.
+   The real power comes when you can use some more advanced things as entries than just a table of strings.
+   For this you need a custom entry maker.
+
+** Custom entry maker
+   You can create a custom entry maker with the `entry_maker` field in the function to create the finder.
+   The entry maker is a function which takes an entry as input and returns an *entry table*.
+   This table has a few required keys which are used for displaying, sorting and more.
+   Required keys are `value`, `display` and `ordinal`.
+   @code lua
+   finder = finders.new_table({
+     results=project_tasks,
+     entry_maker = function(project)
+       return {
+         value = project,
+         display = project.name,
+         ordinal = project.name,
+       }
+     end,
+     sorter = conf.generic_sorter(opts),
+   })
+   @end
+
+   `value` is the value of the entry (we'll use this one later).
+   You should set this to the original entry so you can access it later.
+
+   `display` is the value that will be displayed.
+   It can either be a string or a function which takes the table returned by the entry maker as value.
+
+   `ordinal` is used for sorting. It's recommended to set this to the display value.
+
+*** Simple display function
+    Let's say we want to make a really simple custom display function which replaces `_` with a space and makes the first letter of the entry uppercase.
+    Most people use a `make_display` function for this.
+    @code lua
+    entry_maker = function(project)
+      local function make_display(entry)
+        return entry.name
+      end
+      return {
+        value = project,
+        display = function(tbl)
+          return make_display(tbl.value) -- the value field is the original entry
+        end ,
+        ordinal = project.name,
+      }
+    end,
+    @end
+    This does exactly the same that we had before.
+
+    Now we can modify the `make_display` function so it modifies the entry to our liking.
+    @code lua
+    local function make_display(entry)
+      local name = entry.name
+      name=name:gsub("_"," ")
+      local first_upper=name:sub(1,1):upper()
+      return first_upper..name[2,-1]
+    end
+    @end
+
+** Complex entries with `entry_display.create`
+   Here we will create a more complex display.
+   This can be done with `entry_display.create`.
+   The code we'll use for this is the following:
+   @code lua
+   entry_maker = function(project)
+     local displayer=entry_display.create({})
+     local function make_display(entry)
+       return displayer({})
+     end
+     return {
+       value = project,
+       display = function(tbl)
+         return make_display(tbl.value) -- the value field is the original entry
+       end ,
+       ordinal = project.name,
+     }
+   end,
+   @end
+   Into the `entry_display.create` function you pass a table which *can* have a `separator` field which will be the separator between the items.
+   You also have to pass an `items` table.
+   Inside this there are table with the width of the items.
+   This can be done with `width=<column value>` or `remaining=true`.
+
+   To the displayer function you should pass a table with a table for each entry inside it.
+   The entry tables contain two elements.
+   The first element is a string which is what will be displayed.
+   The second one is a highlight group for it.
+
+   Here we will display the project name and a count of the tasks, separated with `:`.
+   @code lua
+   entry_maker = function(project)
+     local displayer=entry_display.create({
+       separator=": ",
+       items={
+         {width=30},
+         {remaining=true}
+       }
+     })
+     local function make_display(entry)
+       return displayer({{entry.name, "String"},{tostring(#entry.tasks).." Tasks","Special"}})
+     end
+     return {
+       value = project,
+       display = function(tbl)
+         return make_display(tbl.value) -- the value field is the original entry
+       end ,
+       ordinal = project.name,
+     }
+   end,
+   @end
+
+
+** Custom entry colors
+   We can take this one step further and change the highlights of the projects based on a condition with a function.
+   We do this by using a function as second entry inside the item tables in the call to the `displayer` function.
+   This function returns a table with nested tables.
+   Each of this tables contains a table with start and end columns and a highlight group.
+
+   We'll dim out projects that have no tasks inside them.
+   @code lua
+   entry_maker = function(project)
+     local displayer = entry_display.create({
+       separator = ": ",
+       items = {
+         { width = 30 },
+         { remaining = true },
+       },
+     })
+     local function make_display(entry)
+       return displayer({
+         {
+           entry.name,
+           function()
+             if #entry.tasks == 0 then
+               return { { { 0, 30 }, "Comment" } }
+             else
+               return { { { 0, 30 }, "String" } }
+             end
+           end,
+         },
+         { tostring(#entry.tasks) .. " Tasks", "Special" },
+       })
+     end
+
+     return {
+       value = project,
+       display = function(tbl)
+         return make_display(tbl.value) -- the value field is the original entry
+       end,
+       ordinal = project.name,
+     }
+   end,
+   @end
+
+** Custom mappings
+   The next thing we do is adding some mappings to our picker.
+   We do this by overwriting the users action for select in the `attach_mappings` field.
+   @code lua
+   pickers.new(opts{
+     finder=finders.new_table({
+       -- already some amazing stuff
+     })
+     attach_mappings=function(prompt_bufnr)
+       actions_set.select:replace(function()
+         return true
+       end)
+       return true
+     end
+   })
+   @end
+   We want to pick the tasks of the project we've selected.
+   We can do that like this:
+   @code lua
+   attach_mappings=function(prompt_bufnr)
+     actions_set.select:replace(function()
+       local entry=state.get_selected_entry()
+       actions.close(prompt_bufnr)
+
+       pick_tasks(entry.value)
+     end)
+   end
+   @end
+
+   With all the knowledge from before you should be able to write the `pick_tasks` function yourself.
+
+** Custom preview
+   The last thing we'll discuss about is how to create a custom preview.
+   What we'll do is display the tasks of a project in the preview window.
+   You can do this with a custom buffer previewer.
+   @code lua
+   pickers.new(opts{
+     finder=finders.new_table({
+       -- already some amazing stuff
+     })
+     attach_mappings=function(prompt_bufnr)
+       -- cool mapping
+     end
+     previewer=previewers.new_buffer_previewer({
+       define_preview=function(self,entry,status)
+       end
+     })
+   })
+   @end
+
+   We can just set lines with the tasks in this buffer like this:
+   @code lua
+   previewer=previewers.new_buffer_previewer({
+     define_preview=function(self,entry,status)
+       local task_lines={}
+       for _, project in ipairs(project_tasks) do
+         if project==entry.value then
+           for _, task in ipairs(project.tasks) do
+             table.insert(task_lines,task.name)
+           end
+         end
+       end
+       if #task_lines ~= 0 then
+         vim.api.nvim_buf_set_lines(self.state.bufnr,0,-1,true,task_lines)
+       else
+         vim.api.nvim_buf_set_lines(self.state.bufnr,0,-1,true,{"No Tasks"})
+       end
+     end
+   })
+   @end
+
+** More things
+   More things you could do:
+   - Create the `pick_tasks` picker
+   - Add highlights to the preview with `vim.api.nvim_buf_add_hl`
+
+** Full Code
+   @code lua
+   local pickers = require("telescope.pickers")
+   local finders = require("telescope.finders")
+   local conf = require("telescope.config").values
+   local entry_display = require("telescope.pickers.entry_display")
+   local actions_set = require("telescope.actions.set")
+   local state = require("telescope.actions.state")
+   local actions = require("telescope.actions")
+   local previewers = require("telescope.previewers")
+
+   local project_tasks = {
+     {
+       name = "paper_airplane",
+       tasks = {
+         {
+           name = "buy paper",
+           status = "urgent",
+           context = "shop",
+         },
+         {
+           name = "read the airplane book",
+           status = "cancelled",
+         },
+         {
+           name = "watch the video",
+           status = "undone",
+           context = "home",
+         },
+       },
+     },
+     {
+       name = "neovim_config",
+       tasks = {
+         {
+           name = "clean up plugins",
+           status = "undone",
+           context = "today",
+         },
+         {
+           name = "install the best plugin (neorg)",
+           status = "done",
+           context = "today",
+         },
+         {
+           name = "write custom telescope picker",
+           status = "pending",
+         },
+       },
+     },
+
+     {
+       name = "new_plugin",
+       tasks = {}, -- got no ideas so far
+     },
+   }
+
+   local function pick_tasks(project)
+     for _, project_tbl in ipairs(project_tasks) do
+       if project_tbl.name == project.name then
+         print(vim.inspect(project_tbl))
+       end
+     end
+   end
+
+   local function reloader()
+     RELOAD("plenary")
+     RELOAD("telescope")
+     RELOAD("ignis.modules.files.telescope")
+     set_options()
+   end
+
+   local function pick_project_tasks(opts) -- always expose options
+     reloader()
+     opts = opts or {} -- if the user didn't specify options
+     pickers.new(opts, {
+       finder = finders.new_table({
+         results = project_tasks,
+         entry_maker = function(project)
+           local displayer = entry_display.create({
+             separator = ": ",
+             items = {
+               { width = 30 },
+               { remaining = true },
+             },
+           })
+           local function make_display(entry)
+             return displayer({
+               {
+                 entry.name,
+                 function()
+                   if #entry.tasks == 0 then
+                     return { { { 0, 30 }, "Comment" } }
+                   else
+                     return {
+                       { { 0, 30 }, "String" },
+                     }
+                   end
+                 end,
+               },
+               { tostring(#entry.tasks) .. " Tasks", "Special" },
+             })
+           end
+
+           return {
+             value = project,
+             display = function(tbl)
+               return make_display(tbl.value) -- the value field is the original entry
+             end,
+             ordinal = project.name,
+           }
+         end,
+       }),
+       sorter = conf.generic_sorter(opts),
+       attach_mappings = function(prompt_bufnr)
+         actions_set.select:replace(function()
+           local entry = state.get_selected_entry()
+           actions.close(prompt_bufnr)
+
+           pick_tasks(entry.value)
+         end)
+         return true
+       end,
+       previewer = previewers.new_buffer_previewer({
+         define_preview = function(self, entry, status)
+           local task_lines = {}
+           for _, project in ipairs(project_tasks) do
+             if project == entry.value then
+               for _, task in ipairs(project.tasks) do
+                 table.insert(task_lines, task.name)
+               end
+             end
+           end
+           if #task_lines ~= 0 then
+             vim.api.nvim_buf_set_lines(
+               self.state.bufnr,
+               0,
+               -1,
+               true,
+               task_lines
+             )
+           else
+             vim.api.nvim_buf_set_lines(
+               self.state.bufnr,
+               0,
+               -1,
+               true,
+               { "No Tasks" }
+             )
+           end
+         end,
+       }),
+     }):find()
+   end
+   @end
