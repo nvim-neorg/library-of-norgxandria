@@ -1,10 +1,10 @@
 @document.meta
-        title: rust
-        description: 
-        authors: max
-        categories: 
-        created: 2022-04-03
-        version: 0.0.11
+title: rust
+description: 
+authors: max
+categories: 
+created: 2022-03-22
+version: 0.0.11
 @end
 
 = TOC
@@ -16,7 +16,7 @@
 ** Hello world
    @code rust
    fn main() {
-       println!("Hello World!");
+     println!("Hello World!");
    }
    @end
 
@@ -31,7 +31,7 @@
    Crates in Rust are like libraries in other programming languages.
    They can are part of packages and contain modules.
    Inside of the modules there are items which you can access.
-   You have to add external crates to your `cargo.toml` file.
+   You have to add external crates to your /cargo.toml/ file.
    This can looks like this (example for `rand` crate): `rand = "0.8.3"`.
 
 
@@ -51,7 +51,7 @@
    @end
 
 ** Printing
-   You can use the `println` macro to output text (see {** Hello World}[hello world]).
+   You can use the `println` macro to output text (see {# Hello World}[hello world]).
 
 *** Placeholders
     You can use the `{}` placeholder to put things into output strings.
@@ -70,7 +70,7 @@
    let apples = 5;
    @end
 
-   Most types have a module where you can call functions to do things. For example {*** Strings}[String].
+   Most types have a module where you can call functions to do things. For example {# Strings}[String].
    The most of these modules have a `new()` function to create a new variable for that type.
 
 *** Mutability
@@ -117,8 +117,8 @@
      let x = 5;
      let x = x + 1;
      {
-         let x = x * 2;
-         println!("The value of x in the inner scope is: {}", x); // x is 12
+       let x = x * 2;
+       println!("The value of x in the inner scope is: {}", x); // x is 12
      }
      println!("The value of x is: {}", x); // x is 6 again
      @end
@@ -186,10 +186,10 @@
      There are two floating-point types.
      They are `f32` and `f64` which are 32 and 64 bits big.
      You should use `f64` in most cases because it has nearly the same speed on modern computer but is more precise.
-     See also how to {****** Annotate type}[annotate the type] and how {****** integer literals}[literals] can look like.
+     See also how to {# Annotate type}[annotate the type] and how {# integer literals}[literals] can look like.
 
 **** Numeric Operations 
-     Rust supports all the standart operations.
+     Rust supports all the standard operations.
      It's important to notice that integer division always rounds down to the nearest integer.
 
 **** Booleans
@@ -220,7 +220,7 @@
       let (x, y, z) = tup;
       println!("The value of the second element is {}", y);
       @end
-      This is called /destructuring/.
+      This is called *destructuring*.
 
       You can also access values by using `.` and the index of the value.
       *Indexing is 0-based*
@@ -230,10 +230,11 @@
       let second = tup.1;
       println!("The second value is {}", second);
       @end
-      ---
-     There is also `()` which is a special tuple.
-     It's an empty value, like `void` in c. It's called /unit value/.
-     Functions without a return value get interpreted as functions with return value `()`.
+
+***** Unit Value
+      There is also `()` which is a special tuple.
+      It's an empty value, like `void` in c. It's called /unit value/.
+      Functions without a return value get interpreted as functions with return value `()`.
 
 **** Arrays
      An array groups together multiple values of the *same type*.
@@ -262,31 +263,6 @@
       If you try to access an index out of range you'll get an error.
       Unlike in other languages you can't access memory outside of the array.
 
-*** String type
-**** String Literals
-     You can use string literals to assign string values to variables.
-     Rust knows all the string literals at compile time (not only the ones from "initial assignments").
-     So you can't change the strings but only the value of to variable to another string literal.
-     They are fast and efficient because their values are hardcoded into the executable.
-     But that doesn't work for things which you don't know the size of.
-     ---
-    String literals are limited in some cases.
-    That's because they are immutable.
-    Also for some string values you don't know their value at compile time (e.g. user input).
-    That's why there is the `String` type.
-    The `String` type has multiple methods which you can use for different things.
-    You can use `String::from` to create a new `String` type value from a string literal.
-    You can also make those variables mutable.
-    An example for modification is the `.push_string` method which you can use on the variable to append a string literal to the string.
-    @code rust
-    let mut s = String::from("hello");
-
-    s.push_str(", world!"); // push_str() appends a literal to a String
-
-    println!("{}", s); // This will print `hello, world!`
-    @end
-
-
 ** Functions
    You define functions in rust with the `fn` keyword, the function name followed by `()` and curly braces to define the scope of the function.
    Functions can be defined everywhere in the code. It doesn't matter if it's before or after where they're called.
@@ -305,7 +281,7 @@
     If your function returns something you have to annotate the value with an arrow after the function name like this:
     @code rust
     fn my_function() -> u32 {
-        3*5
+      3*5
     }
     @end
 
@@ -315,7 +291,7 @@
     You can then later use the values inside the function:
     @code rust
     fn adder(x:u32, y:u32) -> u32 {
-        x+y
+      x+y
     }
     let x = adder(3,5);
     println!("3 and 5 added equals {}",x);
@@ -328,9 +304,9 @@
    let number = 3;
 
    if number < 5 {
-       println!("condition was true");
+     println!("condition was true");
    } else {
-       println!("condition was false");
+     println!("condition was false");
    }
    @end
 
@@ -353,11 +329,11 @@
     let mut counter = 0;
 
     let result = loop {
-        counter += 1;
+      counter += 1;
 
-        if counter == 10 {
-            break counter * 2;
-        }
+      if counter == 10 {
+        break counter * 2;
+      }
     };
     @end
 
@@ -373,21 +349,21 @@
     @code rust
     let mut count = 0;
     'counting_up: loop {
-        println!("count = {}", count);
-        let mut remaining = 10;
+      println!("count = {}", count);
+      let mut remaining = 10;
 
-        loop {
-            println!("remaining = {}", remaining);
-            if remaining == 9 {
-                break;
-            }
-            if count == 2 {
-                break 'counting_up;
-            }
-            remaining -= 1;
+      loop {
+        println!("remaining = {}", remaining);
+        if remaining == 9 {
+          break;
         }
+        if count == 2 {
+          break 'counting_up;
+        }
+        remaining -= 1;
+      }
 
-        count += 1;
+      count += 1;
     }
     println!("End count = {}", count);
     @end
@@ -398,8 +374,8 @@
     @code rust
     let x = 1
     while x > 10 {
-        println!("X is {}", x);
-        x += 1;
+      println!("X is {}", x);
+      x += 1;
     }
     @end
 
@@ -412,7 +388,7 @@
     let a = [10, 20, 30, 40, 50];
 
     for element in a {
-        println!("the value is: {}", element);
+      println!("the value is: {}", element);
     }
     @end
 
@@ -423,7 +399,7 @@
      This can be done like this:
      @code rust
      for number in (1..6).rev() {
-         println!("{}", number);
+       println!("{}", number);
      }
      @end
      This will print 5,4,3,2,1.
@@ -431,7 +407,7 @@
 ** References
    You can use references to variables by putting a `&` in front of their name.
    You do this so they can be accesses in multiple places without copying them into memory multiple times.
-   An example for this is for {**** input}[input]
+   An example for this is for {# input}[input]
    References are also immutable by default.
    If you want to make a mutable one you need to do `&mut <variable>`.
 
@@ -457,7 +433,7 @@
      Data on the stack must have a known fixed size.
 
      Values local to a function and values passed to it are stored on the heap and popped off after the function ends.
-     All the data types from {*** Scalar Types}[scalar] and {*** integer types}[integer] types can be stored on the stack because they have a fixed size.
+     All the data types from {# Scalar Types}[scalar] and {# integer types}[integer] types can be stored on the stack because they have a fixed size.
      Therefore they can be accessed really fast an easily copied if a new independent instance is needed.
 
 **** Heap
@@ -483,7 +459,7 @@
    Scopes are often delimited with `{}`.
    ---
 
-  Values of the {*** String type}[`String`] type need to allocate memory on the heap.
+  Values of the {# String type}[`String`] type need to allocate memory on the heap.
   For this memory needs to be requested from the memory allocator at runtime and memory needs to be returned to the allocator when the `String` value is no longer needed.
   The first action is done when we do `String::from`.
   In many languages the second action is done by a /garbage collector/.
@@ -548,35 +524,35 @@
    You pass a reference by putting a `&` in front of the variable name in the function call and you also put a `&` before the type in the annotations.
    @code rust
    fn main() {
-       let s1 = String::from("hello");
+     let s1 = String::from("hello");
 
-       let len = calculate_length(&s1);
+     let len = calculate_length(&s1);
 
-       println!("The length of '{}' is {}.", s1, len);
+     println!("The length of '{}' is {}.", s1, len);
    }
 
    fn calculate_length(s: &String) -> usize {
-       s.len()
+     s.len()
    }
    @end
 
    `&si` references to `s1` here but it does not own it.
    Because of that `s1` won't be dropped when `s` is no longer used.
 
-   This action of taking a reference and using it is called /borrowing/.
+   This action of taking a reference and using it is called *borrowing*.
 
 *** Mutable References
     References are just like variables immutable by default.
     You can make the mutable like this:
     @code rust
     fn main() {
-        let mut s = String::from("hello");
+      let mut s = String::from("hello");
 
-        change(&mut s);
+      change(&mut s);
     }
 
     fn change(some_string: &mut String) {
-        some_string.push_str(", world");
+      some_string.push_str(", world");
     }
     @end
 
@@ -585,13 +561,14 @@
     @code rust
     let mut s = String::from("hello");
     {
-        let r1 = &mut s;
+      let r1 = &mut s;
     } // r1 goes out of scope here, so we can make a new reference with no problems.
 
     let r2 = &mut s;
     @end
     ---
-   - At any time you can only have /either/ one mutable reference /or/ any number of immutable references.
+| reference rules
+   - At any time you can only have *either* one mutable reference *or* any number of immutable references.
    - References must be valid.
 
 ** Slice Type
@@ -631,17 +608,17 @@
   /Structures/ known as /structs/ are like custom types.
   You can use them to group together related values.
   You can also associate functions with the values.
-  Structs are similar to {**** tuples}[tuples].
+  Structs are similar to {# tuples}[tuples].
   The difference is that you can name the values so you don't have to care about the order and the code is more readable.
 
 ** Defining Structs
    You can define structs with the `struct` keyword followed by the name and `{}` inside which you define the /fields/ of the struct.
    @code rust
    struct User {
-       active: bool,
-       username: String,
-       email: String,
-       sign_in_count: u64,
+     active: bool,
+     username: String,
+     email: String,
+     sign_in_count: u64,
    }
    @end
 
@@ -649,10 +626,10 @@
    You can create an instance for a struct like this: (example from above used)
    @code rust
    let user1 = User {
-       email: String::from("someone@example.com"),
-       username: String::from("someusername123"),
-       active: true,
-       sign_in_count: 1,
+     email: String::from("someone@example.com"),
+     username: String::from("someusername123"),
+     active: true,
+     sign_in_count: 1,
    };
    @end
    You can access values with `.` and the field name:
@@ -667,12 +644,12 @@
    Here you can also see how you annotate functions that return an instance of a struct.
    @code rust
    fn build_user(email: String, username: String) -> User {
-       User {
-           email, // instead of email: email
-           username, // instead of username: username
-           active: true,
-           sign_in_count: 1,
-       }
+     User {
+       email, // instead of email: email
+       username, // instead of username: username
+       active: true,
+       sign_in_count: 1,
+     }
    }
    @end
 
@@ -680,8 +657,8 @@
    You can use the `..` syntax to just extend an existing struct with new fields:
    @code rust
    let user2 = User {
-       email: String::from("another@example.com"),
-       ..user1
+     email: String::from("another@example.com"),
+     ..user1
    };
    @end
    This will set all fields which aren't specified to the values which they have in `user1`.
@@ -695,11 +672,11 @@
    struct Point(i32, i32, i32);
 
    fn main() {
-       let black = Color(0, 0, 0);
-       let origin = Point(0, 0, 0);
+     let black = Color(0, 0, 0);
+     let origin = Point(0, 0, 0);
    }
    @end
-   You can access the values inside them like the values of {***** Access values}[tuples].
+   You can access the values inside them like the values of {# Access values}[tuples].
 
 ** Printing instances
    You can use `{:\?}` as placeholder inside `println!` to use an output format called `debug`.
@@ -709,17 +686,17 @@
    @code rust
    #[derive(Debug)]
    struct Rectangle {
-       width: u32,
-       height: u32,
+     width: u32,
+     height: u32,
    }
 
    fn main() {
-       let rect1 = Rectangle {
-           width: 30,
-           height: 50,
-       };
+     let rect1 = Rectangle {
+       width: 30,
+       height: 50,
+     };
 
-       println!("rect1 is {:?}", rect1);
+     println!("rect1 is {:?}", rect1);
    }
    @end
 
@@ -731,26 +708,26 @@
    You can then use this method with a `.` and the method name.
    @code rust
    struct Rectangle {
-       width: u32,
-       height: u32,
+     width: u32,
+     height: u32,
    }
 
    impl Rectangle {
-       fn area(&self) -> u32 {
-           self.width * self.height
-       }
+     fn area(&self) -> u32 {
+       self.width * self.height
+     }
    }
 
    fn main() {
-       let rect1 = Rectangle {
-           width: 30,
-           height: 50,
-       };
+     let rect1 = Rectangle {
+       width: 30,
+       height: 50,
+     };
 
-       println!(
-           "The area of the rectangle is {} square pixels.",
-           rect1.area()
-       );
+     println!(
+       "The area of the rectangle is {} square pixels.",
+       rect1.area()
+     );
    }
    @end
 
@@ -759,25 +736,25 @@
    Those functions you can access with `<struct_name>::<function_name>()`.
    @code rust
    impl Rectangle {
-       fn square(size: u32) -> Rectangle {
-           Rectangle {
-               width: size,
-               height: size,
-           }
+     fn square(size: u32) -> Rectangle {
+       Rectangle {
+         width: size,
+         height: size,
        }
+     }
    }
    let sq = Rectangle::square(5);
    @end
 
 * Enums
-  /Enumerations/ or /enums/ allow you to define a type by enumerating its possible /variants/.
+  *Enumerations* or *enums* allow you to define a type by enumerating its possible *variants*.
 
 ** Defining an Enum
    You define enums with the `enum` keyword, the name, a pair of curly braces and the possible values.
    @code rust
    enum IpAddrKind {
-       V4,
-       V6,
+     V4,
+     V6,
    }
    @end
 
@@ -801,8 +778,8 @@
      Data can be added in a format like tuples like this:
      @code rust
      enum IpAddr {
-         V4(u8, u8, u8, u8),
-         V6(String),
+       V4(u8, u8, u8, u8),
+       V6(String),
      }
 
      let home = IpAddr::V4(127, 0, 0, 1);
@@ -815,16 +792,769 @@
      You can also add data with names fields like struct in the following way:
      @code rust
      enum Message {
-         Move { x: i32, y: i32},
-         Write(String),
-         ChangeColor(i32, i32, i32),
+       Move { x: i32, y: i32},
+       Write(String),
+       ChangeColor(i32, i32, i32),
      }
      @end
      ---
     You could also create similar data strucutres with structs.
     The difference is that here all of them (`Move`,`Name`,`Color`) have the same type so you can pass them to the same function.
 
-* Usef ul things
+*** Methods
+    You can also define methods for enums just like for structs:
+    @code rust
+    impl Message {
+      fn call(&self) {
+        // do things here
+      }
+    }
+
+    let m = Message::Write(String::from("hello"));
+    m.call();
+    @end
+
+** Option enum
+   The `Option` type enum is defined by the standard library.
+   It's used in a case where a value can be something or nothing.
+   Rust doesn't have a `null` value that means that there is no value (like `nil` in lua).
+   Rust has an enum that represents the concept of a value being present or absent: `Option<T>`.
+
+   The `Option<T>` enum is defined like this:
+   @code rust
+   enum Option<T> {
+     None,
+     Some(T),
+   }
+   @end
+   This enum is in the scope by default.
+   So you don't have to use `Option::` to access the values.
+   You can directly use `None` and `Somet(T)` which are values with the type `Option<T>`.
+
+   `<T>` is a generic type.
+   That means that the `T` in `Some(T)` can hold a value of every type and that each concrete type that gets used in `T` makes the `Option<T>` a different type.
+   @code rust
+   let some_number = Some(5);
+   let some_string = Some("a string");
+
+   let absent_number: Option<i32> = None;
+   @end
+   Here the type of `some_number` is `Option<i32>`, the one of `some_string` `Option<&str>`.
+   If you assign something a `None` value you need to annotate the type because the compiler can't guess the type of the `Some` value.
+
+*** Why Option enum
+    If you have `let number=Some(5)` then the type of `number` is `Option<i32>`.
+    The compiler doesn't allow you to use this number like it was type `i32` and definitely a valid value.
+    For example this wouldn't work:
+    @code rust
+    let x: i8 = 5;
+    let y: Option<i8> = Some(5);
+
+    let sum = x + y;
+    @end
+
+    So if you want to create a value that can be null you have to use `Option<T>` and then also explicitly handle the case when it's null.
+    If the type isn't `Option<T>` you can be sure that the value isn't null.
+    ---
+
+** `match` Control Flow Construct
+   With this control flow construct you can compare values against some patterns and execute code based on which pattern is matched.
+   The code for the first pattern that matches gets execucted.
+
+*** Creating match statements
+    You create a `match` statement with the `match` keyword, an expression and `{}`.
+    This looks like an {# If/Else Statements}[`if` statement].
+    The difference is that in an `if` statement the expression needs to return a boolean value.
+    Here the expression can return any type.
+    Inside the `{}` there are so called /`match` arms/.
+
+**** Match arms
+     Each match arm consists of three parts:
+     ~ A pattern
+     ~ `=>`
+     ~ Code to execute
+
+     Each arm is separated from the other ones with a comma.
+     The result of the expression that gets executed in an arm is the result of the whole `match` statement.
+     You can (if the code is multiple lines you must) use `{}` around the code.
+     ---
+    @code rust
+    enum Coin {
+      Penny,
+      Nickel,
+      Dime,
+      Quarter,
+    }
+    fn value_in_cents(coin: Coin) -> u8 {
+      match coin {
+        Coin::Penny => {
+          println!("Lucky penny!");
+          1
+        }
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter => 25,
+      }
+    }
+    @end
+
+*** Patterns that bind to values
+    We can change the example to include a state for quarters.
+    You could do this and then print out the state like this:
+    @code rust
+    #[derive(Debug)] // so you can print out the code
+    enum UsState {
+      Alabama,
+      Alaska,
+      // ...
+    }
+
+    enum Coin {
+      Penny,
+      Nickel,
+      Dime,
+      Quarter(UsState),
+    }
+    fn value_in_cents(coin: Coin) -> u8 {
+      match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
+          println!("State quarter from {:?}!", state);
+          25
+        }
+      }
+    }
+    @end
+
+*** Matching with `Option<T>`
+    You can match with `Option<T>` and for example change values like this:
+    @code rust
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+      match x {
+        None => None,
+        Some(i) => Some(i + 1),
+      }
+    }
+
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+    @end
+
+*** Exhaustive Matches
+    If you have this function in the above example:
+    @code rust
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+      match x {
+        Some(i) => Some(i + 1),
+      }
+    }
+    @end
+    The code won't compile.
+    This is because matches are *exhaustive*. All cases need to be handled.
+    For example if you have a game where a player dies when he rolls a 1, goes 3 steps back when he rolls a 6 and otherwise moves the number of fields he rolled forward.
+    You could do that like this:
+    @code rust
+    let dice_roll = 5;
+    match dice_roll {
+      1 => die(),
+      6 => go_back(3),
+      other => move_player(other),
+    }
+
+    fn die() {}
+    fn go_back(num_spaces: u8) {}
+    fn move_player(num_spaces: u8) {}
+    @end
+    Other can be any valid variable name.
+    It will match everything not matched before.
+    It's just used to be able to use the value in the code that gets executed.
+
+    If you won't use the matched value you can just use `_`.
+    This shows the compiler that you don't plan to use the variable and therefore it won't give an error "unused variable".
+    If you want to do nothing you can use the {# unit value}:
+    @code rust
+    match dice_roll {
+      1 => add_fancy_hat(),
+      6 => remove_fancy_hat(),
+      _ => (),
+    }
+    @end
+
+** If let statements
+   They are a like a wrapper around {# `match` Control Flow Construct}[`match` statements].
+   Those are equal:
+   @code rust
+   let config_max = Some(3u8);
+   match config_max {
+     Some(max) => println!("The maximum is configured to be {}", max),
+     _ => (),
+   }
+   @end
+
+   @code rust
+   let config_max = Some(3u8);
+   if let Some(max) = config_max {
+     println!("The maximum is configured to be {}", max);
+   }
+   @end
+   They are useful so you don't have to add a lot of boilerplate code.
+
+* Packages, Crates and Modules
+  - *Packages*: A Cargo feature that lets you build, test, and share crates
+  - *Crates*: A tree of modules that produces a library or executable
+  - *Modules* and use: Let you control the organization, scope, and privacy of paths
+  - *Paths*: A way of naming an item, such as a struct, function, or module
+
+**  Packages and Crates
+    Creates can either be a binary or a library.
+    The /crate root/ is a file from which the compiler starts and which makes up the root module of the crate.
+    A package is one or more crates that provide a set of functionality.
+    Each package contains a /Cargo.toml/ file that explains how to build the crates.
+    There are some rules for what a crate can contain:
+    - At least 1 crate
+    - At most one library crate
+    - As many binary crates as wanted
+
+    You can create a new package with `Cargo new`.
+    This will create a /src/main.rs/ and a /Cargo.toml/
+    The /src/main.rs/ file is for cargo the root of a binary crate with the same name as the package.
+    If there is a /src/lib.rs/ file it's a library crate with the same name as the package with /src/lib.rs/ as crate root.
+    If a package has a /src/main.rs/ and a /src/lib.rs/ file is contains both a library and a binary crate with the same name as the package.
+    You can have a package with multiple binary crates by placing files inside /src/bin/.
+    Each of the files will be it's own binary crate.
+
+    A create groups together related functionality in a scope so you can use it easily in other places.
+
+** Modules
+   Here is a quick summary for modules:
+   - *Start from the crate root*:
+     When compiling a crate, the compiler first looks in the crate root file (usually /src/lib.rs/ for a library crate or /src/main.rs/ for a binary crate).
+   - *Declaring modules*:
+     In the crate root file, you can declare a new module named, say, “garden”, with `mod garden;`.
+     The compiler will look for the code inside the module in these places:
+   -- Inline, directly following `mod garden`, within curly brackets instead of the semicolon
+   -- In the file /src/garden.rs/
+   -- In the file /src/garden/mod.rs/
+   - *Declaring submodules*:
+     In any file other than the crate root that’s being compiled as part of the crate (for example, /src/garden.rs/), you can declare submodules (for example, `mod vegetables;`).
+     The compiler will look for the code inside submodules in these places within a directory named for the parent module:
+   -- Inline, directly following `mod vegetables`, within curly brackets instead of the semicolon
+   -- In the file /src/garden/vegetables.rs/
+   -- In the file /src/garden/vegetables/mod.rs/
+   - *Paths to code in modules*:
+     Once a module is being compiled as part of your crate, you can refer to code in that module (for example, an `Asparagus` type in the garden vegetables module) from anywhere else in this crate by using the path `crate::garden::vegetables::Asparagus` as long as the privacy rules allow.
+   - *Private vs public*:
+     Code within a module is private from its parent modules by default.
+     To make a module public, declare it with `pub mod` instead of `mod`.
+     To make items within a public module public as well, use `pub` before their declarations.
+   - *The `use` keyword*:
+     Within a scope, the `use` keyword creates shortcuts to items to reduce repetition of long paths.
+     In any scope that can refer to `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use crate::garden::vegetables::Asparagus;` and then only need to write `Asparagus` to make use of that type in the scope.
+
+   This would be the file structure for these examples:
+   @code
+   backyard
+    ├── Cargo.lock
+    ├── Cargo.toml
+    └── src
+        ├── garden
+        │   └── vegetables.rs
+        ├── garden.rs
+        └── main.rs
+   @end
+
+*** Paths to refer items in the module tree
+    You can use absolute or relative paths:
+    - Absolute paths start from the crate root by using the crate name or `crate` for the current crate.
+    - Relative paths start from the current module.
+
+    So (using the example from above) you could do something like this in /src/main.rs/:
+    @code rust
+    // Make sure to make the module, submodules and items public if you want to use them
+    // By default everything is private
+    pub mod garden;
+
+    fn test() {
+      // Absolute path
+      let x=crate::garden::vegetables::Asparagus;
+
+      // Relative path
+      let x = garden::vegetables::Asparagus;
+      x
+    }
+    @end
+
+    You should decide whether to use an absolute or a relative path based on whether you think you'll move only the usage or the definition of the code or both together.
+
+    You can also start relative paths with `super`. This is like using `..` in a file system path.
+
+*** Public enums and structs
+    You can make {# structs} and {# enums} public.
+    For struct you have to make sure to also make all the fields you want to use public as well.
+    Be default all fields all private.
+    For enums you only have to use the `pub` keyword before the `enum` keyword.
+
+*** Using `use` to bring modules into scope
+    You can use e.g. `use crate::garden::vegetables;` to bring `vegetables` into scope.
+    Later you can then use `vegetables::Asparagus` without providing the whole path.
+    This works with absolute and relative paths.
+
+    Normally use bring enums and struct directly into scope by providing the full path.
+    For other things like functions you don't do that so you can see where the function was defined.
+    This also avoids name conflicts.
+
+**** Aliases with `as`
+     You can also avoid the name collisions by using an alias.
+     You could for example do this:
+     @code rust
+     use std::fmt::Result;
+     use std::io::Result as IoResult;
+     @end
+
+**** Re-exporting
+     If you use `use` the name in the new scope is private.
+     You can use `pub use` to make it available.
+     This is called re-exporting.
+
+**** External packages
+     You can use external packages by putting them into your `Cargo.toml` with something like this:
+     @code toml
+     [dependencies]
+     rand = "0.8.4"
+     @end
+     You can then use this in your code with e.g. `use rand::Rng` to use the `Rng` trait.
+     You need to do this for some functions of certain crates.
+     Sometimes you don't have to.
+
+**** Using nested paths
+     You can use `{}` to use multiple modules of the same crate like this:
+     @code rust
+     // normal
+     use std::cmp::Ordering;
+     use std::io;
+
+     // nested paths
+     use std::{cmp::Ordering, io};
+     @end
+
+     You can do the same for `use` statements that share a subpath with `use std::io::{self, Write};`.
+     This will bring `std::io` and `std::io::Write` into scope.
+
+**** Glob operator
+     You can use the glob operator `*` to bring all defined in a path into scope like this:
+     @code rust
+     use std::collections::*;
+     @end
+
+* Collections
+  Collections are a way to store values.
+  Unlike {# tuples} and {# arrays} they are stored on the heap.
+  Because of that the size doesn't need to be known on compile time.
+** Vectors
+   Vectors have the type `Vec<T>` where `T` is the type of the values.
+   They can store values of the same type.
+
+*** Creating a new vector
+    You create a new vector with the `Vec::new()` function like this:
+    @code rust
+    let v: Vec<i32> = Vec::new();
+    @end
+    In this case you need to add a type annotation because you don't insert any values into the vector. 
+
+    You can also create a vector with initial values.
+    You do that with the `vec!` macro:
+    @code rust
+    let v = vec![1, 2, 3];
+    @end
+    This vector will have the type `Vec<i32>` because `i32` is the default type for integers.
+
+*** Updating a vector
+    To be able to modify a vector you need to make it mutable ({# Mutability})
+    You can add new values to a vector with the `push` method like this:
+    @code rust
+    let mut v = Vec::new(); // no annotation needed since `i32` values are pushed
+    v.push(5);
+    v.push(9);
+    @end
+
+    You can remove and return the last value of a vector with the `pop` method.
+
+*** Dropping a vector
+    If a vector gets dropped (goes out of scope) all it's values will be cleaned up.
+
+*** Reading vectors
+    There are two ways to read the values of a vector:
+    - indexing
+    - use the `get` method
+
+    @code rust
+    let v = vec![1, 2, 3, 4, 5];
+
+    let third: &i32 = &v[2]; // zero based indexing
+    println!("The third element is {}", third);
+
+    match v.get(2) {
+      Some(third) => println!("The third element is {}", third),
+      None => println!("There is no third element."),
+    }
+    @end
+
+    As you can see indexing `&` and `[]` gives a reference.
+    Using `get` gives an `Option<&T>`.
+
+**** Differences
+     The difference between the two methods is how they react when the element isn't accessible.
+     When you try to index a value that doesn't exist the program panics and stops.
+     But when you use `.get` it just returns `None`.
+     So you'd use the `get` method if it's possible that a value isn't present *under normal circumstances*.
+     Your code will then have the logic to handle the `None` case ({# option enum}).
+     ---
+    You have to remember that you can't have an immutable and a mutable reference together ({# reference rules}).
+    When you `push` to a vector a mutable borrow occurs.
+    This is because the values in a vector are next to each other in memory and may have to be moved when there is no memory left next to the other values.
+    So this code
+    @code rust
+    let mut v = vec![1, 2, 3, 4, 5];
+
+    let first = &v[0];
+
+    v.push(6);
+
+    println!("The first element is: {}", first);
+    @end
+    ... would lead to this error:
+    @code
+    error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
+     --> src/main.rs:6:5
+      |
+    4 |     let first = &v[0];
+      |                  - immutable borrow occurs here
+    5 | 
+    6 |     v.push(6);
+      |     ^^^^^^^^^ mutable borrow occurs here
+    7 | 
+    8 |     println!("The first element is: {}", first);
+      |                                          ----- immutable borrow later used here
+    @end
+
+*** Iterating over values of vectors
+    You can iterate over a vector like this:
+    @code rust
+    let v = vec![10, 20, 30];
+    for i in &v {
+      println!("{}",i);
+    }
+    @end
+
+    You can also iterate with mutable references.
+    For example to add 50 to every value.
+    @code rust
+    let mut v = vec![100, 32, 57];
+    for i in &mut v {
+      *i += 50; // `*` for dereferencing -> value is needed to add 50 to it not just pointer
+    }
+    @end
+
+*** Store multiple types with enums
+    You sometimes want to store values of different types together but vectors only allow you to store values of one type.
+    You can use {# enums} to do that for example like this:
+    @code rust
+    enum SpreadsheetCell {
+      Int(i32),
+      Float(f64),
+      Text(String),
+    }
+
+    let row = vec![
+      SpreadsheetCell::Int(3),
+      SpreadsheetCell::Text(String::from("blue")),
+      SpreadsheetCell::Float(10.12),
+    ];
+    @end
+
+*** Other methods/functions
+    Some useful methods which you can use on vectors: (`vec` is a variable with a value of the type `Vec<T>`)
+    - `vec.len()`: Gets the amount of values in the vector
+    - `vec.remove(<index>)`: Removes element and returns it
+    - `Vec::with_capacity(<capacity>)`: With this you can create a vector with the specified size.
+      Then there will be that amount of space allocated.
+      This is useful to avoid that the vector needs more space, new memory needs to be allocated and the values need to be copied which could be quite slow.
+    - `vec.shrink_to_fit()`: This shrinks the capacity of the vector as much as possible.
+    - `vec.capacity()`: Checks how much elements the vector can hold without reallocating.
+    @code rust
+    let vec: Vec<i32> = Vec::with_capacity(10);
+    assert_eq!(vec.capacity(), 10);
+    @end
+    - `vec.append(<other>)`: Moves all elements from `<other>` into `vec` leaving `<other>` empty.
+    @code rust
+    let mut vec = vec![1, 2, 3];
+    let mut vec2 = vec![4, 5, 6];
+    vec.append(&mut vec2);
+    assert_eq!(vec, [1, 2, 3, 4, 5, 6]);
+    assert_eq!(vec2, []);
+    @end
+
+
+** String type
+*** String literals
+    You can use string literals to assign string values to variables.
+    Rust knows all the string literals at compile time (not only the ones from "initial assignments").
+    So you can't change the strings but only the value of to variable to another string literal.
+    They are fast and efficient because their values are hardcoded into the executable.
+    But that doesn't work for things which you don't know the size of.
+    ---
+   String literals are limited in some cases.
+   That's because they are immutable.
+   Also for some string values you don't know their value at compile time (e.g. user input).
+   That's why there is the `String` type.
+
+*** Creating a `String` value
+    You can also use `String::new()` to create a new empty string.
+    You can use `String::from` to create a new `String` type value from a string literal.
+    @code rust
+    let s = String::new();
+    let s2 = String::from("string");
+    @end
+
+    Last but not least you can use the `to_string` method on every value that implements the `Display` trait.
+    This is for example the case for the number types and string literals.
+
+*** Modifying a String
+**** Appending
+     An example for modification is the `.push_str` method which you can use on the variable to append a string literal to the string.
+     Notice that for this the string needs to be mutable.
+     @code rust
+     let mut s = String::from("hello");
+     s.push_str(", world!"); // push_str() appends a literal to a String
+     println!("{}", s); // This will print `hello, world!`
+     @end
+     The `push_str` method does not take ownership of the values passed into it.
+     So something like this is no problem:
+     @code rust
+     let mut s1 = String::from("foo");
+     let s2 = "bar";
+     s1.push_str(s2);
+     println!("s2 is {}", s2);
+     @end
+
+     There is also the `push` method which takes a single character as parameter.
+     @code rust
+     let mut s = String::from("lo");
+     s.push('l'); // contains now `lol`
+     @end
+
+**** Concatenation
+     There are two ways to concatenate two string.
+
+***** `+` operator
+      You can use the `+` operator like this:
+      @code rust
+      let s1 = String::from("Hello, ");
+      let s2 = String::from("world!");
+      let s3 = s1 + &s2; // notice that `&s2` is a reference
+      @end
+      After this `s1` can no longer be used.
+      The reason for that and also the reason why you have to use a reference for `s2` is the signature of the `add` method which is used by the `+` operator.
+      This signature looks something like this:
+      @code rust
+      fn add(self, s: &str) -> String {
+      @end
+      The compiler can convert the `&String` type to a `&str`.
+      As you can see `add` does not take ownership of the parameter.
+      So you'll still be able to use `s2` after the concatenation.
+      The function takes ownership of `self` though.
+      So `s1` is moved into the `add` call and will no longer be valid after it.
+
+      The `+` operator (`add`) actually takes ownership of the first value, appends a copy of the contents of the second value and returns ownership of the result.
+      You could also do that with more than two strings:
+      @code rust
+      let s1 = String::from("tic");
+      let s2 = String::from("tac");
+      let s3 = String::from("toe");
+
+      let s = s1 + "-" + &s2 + "-" + &s3;
+      @end
+      But since that is getting quite complicated with all the `+` and `"` you should rather use the `format!` macro.
+
+***** `format!` macro
+      The format macro is similar to {# printing}[`println!`].
+      But instead of printing the value to the screen it returns a `String` value with the contents.
+      It also uses references so it doesn't take ownership of any of the values.
+      The example from above could be rewritten like this:
+      @code rust
+      let s1 = String::from("tic");
+      let s2 = String::from("tac");
+      let s3 = String::from("toe");
+
+      let s = format!("{}-{}-{}", s1, s2, s3);
+      @end
+
+*** Indexing into Strings
+    Rust does not support indexing of strings like this:
+    @code rust
+    let s1 = String::from("hello");
+    let h = s1[0];
+    @end
+    The reason for that is actually quite simple.
+    Strings get stored as `Vec<u8>`.
+    The problem is that not every single UTF-8 character (e.g. Cyrillic letters) is one byte long.
+    So if you'd store `"Здравствуйте"` in a string and then get the first element with `[0]` you'd get the first byte which would be `208`.
+    But users don't want to get a number but a single letter.
+    To avoid misunderstandings like this rust doesn't compile the code.
+
+    Another reason is that operation are expected to take constant time (`O(1)`).
+    This isn't possible since Rust would have to go through the contents from the beginning to the index to check how many valid characters there are.
+
+*** Slicing Strings
+    It's already described how to slice string in {# slice type}.
+    The indices for string slices are bytes.
+    Rust will give you an error if you try to slice in the center of a multi-byte character.
+
+*** Iterating over strings
+    There are two methods to create iterables for strings.
+
+    You can use `.chars()` to iterate over the characters of strings (works with multi-byte characters).
+
+    You can also use `.bytes()`.
+    With this you can get all the bytes of the string as numbers.
+
+** Hash maps
+   The type `HashMap<K, V>` stores a mapping of keys of type K to values of type V using a *hashing function*, which determines how it places these keys and values into memory.
+   They are useful if you want to look up data with a key of any type and not an index like vectors.
+   All of the keys and all of the values in one hash map have to be of the same type though.
+   Hash maps aren't in scope by default. You need to bring it into scope like this:
+   @code rust
+   use std::collections::HashMap;
+   @end
+
+*** Creating a new hash map
+    You can create a new empty hash map with `HashMap::new()`.
+    Then you can insert values into it with the `.insert()` method.
+    This method takes two arguments where the first is a key and the second a value.
+    @code rust
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"),10);
+    scores.insert(String::from("Yellow"),50);
+    @end
+
+    Another way to create hash maps is by using iterators and the `collect` method on a vector of tuples where each tuple consists of a key and it's value.
+    You use the `zip` method to combine two iterables into pairs of tuples.
+    You can then use `collect` to turn the iterator of tuples into a has map.
+    @code rust
+    use std::collections::HashMap;
+
+    let teams = vec![String::from("Blue"), String::from("Yellow")];
+    let initial_scores = vec![10, 50];
+
+    // type annotation needed because `collect` can use many different type
+    // using `_` because the type can be determined by the types in the vectors
+    let mut scores: HashMap<_, _> = teams.into_iter().zip(initial_scores.into_iter()).collect();
+    @end
+
+*** Ownership
+    Values that implement the `Copy` trait are copied into the hash map.
+    Owned values (e.g. `String`) are moved and the hash map will be the owner of them (see {# ownership rules}).
+
+    If you use references in a has map the values that the references point to must be valid for at least as long as the hash map is valid.
+
+*** Accessing values
+    You can use the `get()` method which takes a key as argument to get the associated value.
+    @code rust
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name);
+    @end
+    The type of `score` is now `Some(&10)`.
+    It could also be `None` if there is no value for that key.
+    This is because `get` uses the {# option enum}.
+
+**** Iterating over key, value pairs
+     @code rust
+     use std::collections::HashMap;
+
+     let mut scores = HashMap::new();
+
+     scores.insert(String::from("Blue"), 10);
+     scores.insert(String::from("Yellow"), 50);
+
+     for (key, value) in &scores {
+       println!("{}: {}", key, value);
+     }
+     @end
+
+*** Update values
+    There are three ways you can handle the case when there already is a value for a key you want to use:
+    - Replace the old value with the new one (disregarding old value)
+    - Keep old value and ignore new one
+    - Combine the old and the new value
+
+**** Overwriting a value
+     You can overwrite a value by just calling `insert` again with the same key.
+     @code rust
+     use std::collections::HashMap;
+
+     let mut scores = HashMap::new();
+
+     scores.insert(String::from("Blue"), 10);
+     scores.insert(String::from("Blue"), 25);
+
+     println!("{:?}", scores); // prints `{"Blue": 25}`
+     @end
+
+**** Only insert if the key has no value
+     You can use the `entry` method which checks if there is an entry for the value and `or_insert` which inserts a value if there is none to do this.
+     The `or_entry` method returns a mutable reference to the value.
+     @code rust
+     use std::collections::HashMap;
+
+     let mut scores = HashMap::new();
+     scores.insert(String::from("Blue"), 10);
+
+     scores.entry(String::from("Yellow")).or_insert(50);
+     scores.entry(String::from("Blue")).or_insert(50);
+
+     println!("{:?}", scores); // prints `{"Yellow": 50, "Blue": 10}`
+     @end
+
+**** Insert value depending on old value
+     For this we use the mutable reference that gets returned by `or_insert`.
+     @code rust
+     use std::collections::HashMap;
+
+     let text = "hello world wonderful world";
+
+     let mut map = HashMap::new();
+
+     for word in text.split_whitespace() {
+       let count = map.entry(word).or_insert(0);
+       *count += 1;
+     }
+
+     println!("{:?}", map);
+     @end
+     This code would count the occurrences of each word in the string.
+
+* Error Handling
+  Rust has two types of errors: *recoverable* and *unrecoverable* errors.
+  For a recoverable error, such as a `file not found` error, we most likely just want to report the problem to the user and retry the operation.
+  Unrecoverable errors are always symptoms of bugs, like trying to access a location beyond the end of an array, and so we want to immediately stop the program.
+
+  Rust uses the type `Results<T, E>` for recoverable errors and the `panic!` macro for unrecoverable errors.
+
+** Unrecoverable errors and `panic!`
+
+* Useful things
 ** Local documentation
    You can access documentation with `rustup doc` in the terminal.
    The Rust book is accessible with `rustup doc --book`.
@@ -857,7 +1587,7 @@
 ** New project
    You can start a new project with `cargo new <project_name>`.
    This will create a directory `<project_name>`.
-   Inside this there will be a `cargo.toml`, a `.gitignore` and a `src/main.rs` file in which there will be a "Hello World!" program.
+   Inside this there will be a `cargo.toml`, a `.gitignore` and a /src/main.rs/ file in which there will be a "Hello World!" program.
 ** Config
    You place the config for cargo in a `cargo.toml` file at the root of your project.
    There you specify metadata about your project and dependencies.
@@ -867,7 +1597,10 @@
     This will compile the code and place an executable inside `target/debug/`.
 **** Release
      You can use the `--release` flag to compile a release.
-     For that the code will take longer to compile but it will be optimized and therefor run faster.
+     For a release binary the code will be optimized so it will run faster. Because of that it takes longer to compile it.
+     ---
+    So if you compile your binary often (e.g. for testing) you shouldn't use the `release` flag.
+    But if you run it often and only compile it once it is worth the time it takes to compile with the `release` flag.
 
 *** Run
     You can build an run your code in one step with `cargo run`.
